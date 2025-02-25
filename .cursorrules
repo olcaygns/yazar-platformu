@@ -1,0 +1,12 @@
+Proje dosyalarını oluştururken modern kodlama standartlarına uygun olarak oluştur.
+
+SOLID prensiplerine uygun olarak kod yaz. Böylece ileride değişiklik yaparken kolaylık sağlayacaksın.
+
+Sana verdiğim promptta istenilen ne ise sadece o kısımda değişiklik yap. Diğer kısımlarda değişiklik yapma. Böylece çalışan kısımları bozmamış olacaksın.
+
+Dosyalara eklemen gereken importları eklemeyi unutma.
+
+Proje kodlarını yazarken güvenlik açıklarından kaçın. Tüm kodları en güvenli ve en yüksek performanslı hale getir.
+
+Projenin en başında ana dizinde bir dosya oluştur. Bu dosyaya projede kullandığın teknolojileri, yöntemleri ve yaklaşımları not et. Projede yapmış olduğumuz tüm değişikleri bu dosyaya not al. Böylece daha sonra projeyi açtığımızda o dosyayı okuyarak neler yaptığımızı görüp ona göre devam edebiliriz.
+
