@@ -2,11 +2,13 @@
 
 import React, { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import Link from 'next/link'
 
 interface Stats {
   totalBooks: number
   totalUsers: number
   publishedBooks: number
+  totalAnnouncements: number
 }
 
 export default function AdminDashboard() {
@@ -14,6 +16,7 @@ export default function AdminDashboard() {
     totalBooks: 0,
     totalUsers: 0,
     publishedBooks: 0,
+    totalAnnouncements: 0,
   })
 
   useEffect(() => {
@@ -35,10 +38,16 @@ export default function AdminDashboard() {
           .from('users')
           .select('*', { count: 'exact', head: true })
 
+        // Toplam duyuru sayısı
+        const { count: totalAnnouncements } = await supabase
+          .from('announcements')
+          .select('*', { count: 'exact', head: true })
+
         setStats({
           totalBooks: totalBooks || 0,
           publishedBooks: publishedBooks || 0,
           totalUsers: totalUsers || 0,
+          totalAnnouncements: totalAnnouncements || 0,
         })
       } catch (error) {
         console.error('İstatistikler yüklenirken hata:', error)
@@ -52,7 +61,7 @@ export default function AdminDashboard() {
     <div className="space-y-6">
       <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
       
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-lg border p-6 shadow-sm">
           <h3 className="text-lg font-medium">Toplam Kitap</h3>
           <p className="text-3xl font-bold">{stats.totalBooks}</p>
@@ -67,6 +76,11 @@ export default function AdminDashboard() {
           <h3 className="text-lg font-medium">Toplam Kullanıcı</h3>
           <p className="text-3xl font-bold">{stats.totalUsers}</p>
         </div>
+
+        <Link href="/admin/duyurular" className="rounded-lg border p-6 shadow-sm hover:bg-gray-50">
+          <h3 className="text-lg font-medium">Duyurular</h3>
+          <p className="text-3xl font-bold">{stats.totalAnnouncements}</p>
+        </Link>
       </div>
     </div>
   )
