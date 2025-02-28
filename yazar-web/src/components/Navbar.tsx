@@ -9,6 +9,7 @@ export function Navbar() {
   const [session, setSession] = React.useState<any>(null)
   const [isAdmin, setIsAdmin] = React.useState(false)
   const router = useRouter()
+  const [activeSection, setActiveSection] = React.useState('hero')
 
   React.useEffect(() => {
     async function checkSession() {
@@ -44,6 +45,28 @@ export function Navbar() {
     return () => subscription.unsubscribe()
   }, [])
 
+  React.useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['hero', 'kitaplar', 'hakkimda', 'iletisim']
+      const scrollPosition = window.scrollY + 100 // Navbar yüksekliği için offset
+
+      for (const section of sections) {
+        const element = document.getElementById(section)
+        if (element) {
+          const top = element.offsetTop
+          const height = element.offsetHeight
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(section)
+            break
+          }
+        }
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   const handleSignOut = async () => {
     try {
       await supabase.auth.signOut()
@@ -56,32 +79,54 @@ export function Navbar() {
   }
 
   return (
-    <header className="w-full border-b">
+    <header className="w-full border-b fixed top-0 bg-white z-50">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <Link className="flex items-center space-x-2" href="/">
-            <span className="inline-block text-xl font-bold">YAZAR</span>
+            <span className="inline-block text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-purple-400">ÖZDEMİR</span>
           </Link>
           
           <div className="flex items-center space-x-8">
             <nav className="hidden md:flex space-x-6">
               <Link
-                className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
-                href="/kitaplar"
+                className={`text-sm font-medium transition-colors ${
+                  activeSection === 'hero'
+                    ? 'text-purple-600'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+                href="/#hero"
+              >
+                Ana Sayfa
+              </Link>
+              <Link
+                className={`text-sm font-medium transition-colors ${
+                  activeSection === 'kitaplar'
+                    ? 'text-purple-600'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+                href="/#kitaplar"
               >
                 Kitaplar
               </Link>
               <Link
-                className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
-                href="/blog"
+                className={`text-sm font-medium transition-colors ${
+                  activeSection === 'hakkimda'
+                    ? 'text-purple-600'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+                href="/#hakkimda"
               >
-                Blog
+                Hakkımda
               </Link>
               <Link
-                className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
-                href="/about"
+                className={`text-sm font-medium transition-colors ${
+                  activeSection === 'iletisim'
+                    ? 'text-purple-600'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+                href="/#iletisim"
               >
-                Hakkında
+                İletişim
               </Link>
             </nav>
 
@@ -110,20 +155,12 @@ export function Navbar() {
                   </button>
                 </>
               ) : (
-                <>
-                  <Link 
-                    href="/giris" 
-                    className="text-sm font-medium text-gray-600 hover:text-gray-900"
-                  >
-                    Giriş Yap
-                  </Link>
-                  <Link 
-                    href="/kayit" 
-                    className="inline-flex h-9 items-center justify-center rounded-md bg-gray-900 px-4 text-sm font-medium text-white hover:bg-gray-800 transition-colors"
-                  >
-                    Kayıt Ol
-                  </Link>
-                </>
+                <Link 
+                  href="/giris" 
+                  className="inline-flex h-9 items-center justify-center rounded-md bg-purple-600 px-4 text-sm font-medium text-white hover:bg-purple-700 transition-colors"
+                >
+                  Giriş Yap
+                </Link>
               )}
             </div>
           </div>
